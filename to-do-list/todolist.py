@@ -5,7 +5,7 @@ class Pessoa:
         self.tarefas = tarefas
 
     def escolhas(self):
-        print('[1] - Adicionar tarefa\n[2] - Ver tarefas\n[3] - Sair\n')
+        print('[1] - Adicionar tarefa\n[2] - Ver tarefas\n[3] - Deleter tarefas\n[4] - Sair\n')
         escolha = int(input('Escolha uma opção: '))
 
         return escolha
@@ -33,6 +33,11 @@ class Pessoa:
             i = i + 1
             print('Tarefa', i, '', tarefa)
 
+    def deletar_tarefa(self):
+        self.exibir_tarefas()
+        escolha = int(input('Escolha a tarefa que deseja deletar: '))
+        self.tarefas.pop(escolha - 1)
+
 pessoa = Pessoa('', 0, [])
 infoPessoa = pessoa.cadastrar_pessoa()
 
@@ -43,6 +48,8 @@ while True:
     elif escolha == 2:
         pessoa.exibir_tarefas()
     elif escolha == 3:
+        pessoa.deletar_tarefa()
+    elif escolha == 4:
         print('Sair')
         break
 
