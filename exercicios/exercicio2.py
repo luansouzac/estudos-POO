@@ -7,8 +7,11 @@ class Professor:
     def calcular_salario_bruto(self):
         self.salario_bruto = self.hr_trabalhada * 50
 
+        return self.salario_bruto
+
     def calcula_salario_liquido(self):
-        self.inss = self.salario_bruto * 0.12
+        salario_bruto = self.calcular_salario_bruto()
+        self.inss = salario_bruto * 0.12
         self.salario_liquido = self.salario_bruto - self.inss
 
 
