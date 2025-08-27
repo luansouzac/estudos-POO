@@ -11,8 +11,11 @@ class Professor:
 
     def calcula_salario_liquido(self):
         salario_bruto = self.calcular_salario_bruto()
-        self.inss = salario_bruto * 0.12
-        self.salario_liquido = self.salario_bruto - self.inss
+        self.__inss = salario_bruto * 0.12
+        self.salario_liquido = self.salario_bruto - self.__inss
+    
+    def get_inss(self):
+        return self.__inss
 
 
 n = input('Digite o seu nome: ')
@@ -24,3 +27,5 @@ professor.calcular_salario_bruto()
 professor.calcula_salario_liquido()
 
 print(professor.nome,'',professor.salario_liquido)
+
+print('INSS: ', professor.get_inss())
