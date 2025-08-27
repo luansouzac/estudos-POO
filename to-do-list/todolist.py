@@ -17,12 +17,15 @@ class Pessoa:
         return self
     
     def cadastrar_tarefa(self):
-        print('Cadastre suas tarefas: \n [3] - Sair')
-
-        nova_tarefa = input('Cadastre a sua tarefa: ')
-        self.tarefas.append(nova_tarefa)
-
-        return self
+        while True:
+            print('[1] - Cadastre suas tarefas: \n [2] - Sair')
+            escolha = int(input('Escolha uma opção: '))
+            if escolha == 2:
+                return False
+            else:
+                nova_tarefa = input('Cadastre a sua tarefa: ')
+                self.tarefas.append(nova_tarefa)
+        
     
     def exibir_tarefas(self):
         i = 0
