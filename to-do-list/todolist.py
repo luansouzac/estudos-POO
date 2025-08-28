@@ -1,8 +1,19 @@
+import sqlite3
+
 class Pessoa:
-    def __init__(self, nome, idade, tarefas):
+    def __init__(self, nome, idade, db_file='todolist.db'):
         self.nome = nome
         self.idade = idade
-        self.tarefas = tarefas
+        self.db_file = db_file
+        self.conn = sqlite3.connect(self.db_file)
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS tarefas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                descricao TEXT NOT NULL
+            )
+        ''')
+        self.conn.commit()
 
     def escolhas(self):
         print('[1] - Adicionar tarefa\n[2] - Ver tarefas\n[3] - Deleter tarefas\n[4] - Sair\n')
@@ -24,25 +35,33 @@ class Pessoa:
                 return False
             else:
                 nova_tarefa = input('Cadastre a sua tarefa: ')
-                self.tarefas.append(nova_tarefa)
+                self.conn.execute('INSERT INTO tarefas (descricao) VALUES (?)', (nova_tarefa,))
+                self.conn.commit()
         
-    
     def exibir_tarefas(self):
-        i = 0
-        for tarefa in self.tarefas:
-            i = i + 1
-            print('Tarefa', i, '', tarefa)
+        self.cursor.execute('SELECT id, descricao FROM tarefas ORDER BY id')
+        tarefas = self.cursor.fetchall()
+        if not tarefas:
+            print('n tem tarefas')
+        else:
+            for tarefa in tarefas:
+                print(f"Tarefa {tarefa[0]}: {tarefa[1]}")
 
     def deletar_tarefa(self):
         self.exibir_tarefas()
         escolha = int(input('Escolha a tarefa que deseja deletar: '))
-        self.tarefas.pop(escolha - 1)
+        self.conn.execute('DELETE FROM tarefas WHERE id = ?', (escolha,))
+        self.conn.commit()
+        print('Tarefa deletada com sucesso!')
+    
+    def __del__(self):
+        self.conn.close()
 
-pessoa = Pessoa('', 0, [])
+pessoa = Pessoa('', 0, 'todolist.db')
 infoPessoa = pessoa.cadastrar_pessoa()
 
 while True:
-    escolha = infoPessoa.escolhas()
+    escolha = pessoa.escolhas()
     if escolha == 1:
         pessoa.cadastrar_tarefa()
     elif escolha == 2:
